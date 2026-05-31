@@ -17,7 +17,7 @@ var AvailabilitySchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Booking'
     }]
-};
+});
 
 // Return the model
 module.exports = mongoose.model('Availability', AvailabilitySchema)

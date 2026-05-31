@@ -30,8 +30,18 @@ app.use(function(req,res,next){
 // log all requests to the console.
 app.use(morgan('dev'));
 
+// Set mongoose strictQuery to suppress deprecation warning
+mongoose.set('strictQuery', false);
+
 // connect to our database (hosted on ???)
-mongoose.connect(config.database);
+mongoose.connect(config.database, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 5000
+}).then(
+    () => console.log('Connected to MongoDB'),
+    err => console.error('MongoDB connection error:', err)
+);
 
 // set static files location
 // used for the requests that our frontend will make

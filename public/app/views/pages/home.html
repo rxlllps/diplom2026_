@@ -1,40 +1,76 @@
 <!-- home.html -->
 
 <!-- HEADER -->
-<header style="text-align: center; margin:5%">
-  <h1 style="font-size: 6em">Purple Fox Karaoke Club</h1>
-
-  <img id="logo" style="max-height: 10em" alt="Brand" src="http://i.imgur.com/xIFrwUi.png">
+<header style="text-align: center; margin:0 auto 40px; margin-top: 20px">
+  <div style="font-size: 5em; margin-bottom: 20px; animation: bounce 1s infinite;">🦊</div>
+  <h1 style="font-size: 3.5em; margin-bottom: 20px">Purple Fox Karaoke Club</h1>
+  <p style="color: #ecf0f1; font-size: 1.1em; margin: 0">Забронируйте комнату для незабываемого вечера</p>
 </header>
 
 
-<div class="container" style="width:50%">
+<div class="container" style="max-width: 900px; background: rgba(255,255,255,0.98)">
 
-	<div class="row" style="margin-bottom:1em" align="center">
-	  	<div class="col-xs-6">
-	  		<a href="/availability" type="button" class="btn btn-block btn-default btn-lg">Availability</a>
+	<div class="row" style="margin-bottom:2em" align="center">
+	  	<div class="col-md-6">
+	  		<div style="padding: 20px; transition: all 0.3s ease; border-radius: 10px;" class="interactive-card">
+	  			<i class="fa fa-calendar" style="font-size: 3em; color: #8b3a8b; margin-bottom: 15px; display: block;"></i>
+	  			<a href="/availability" type="button" class="btn btn-block btn-default btn-lg" style="padding: 15px; font-size: 1.1em">
+	  				<i class="fa fa-calendar-o"></i> Проверить доступность
+	  			</a>
+	  		</div>
 	  	</div>
-	  	<div class="col-xs-6">
-	  		<a href="/bookings/create" type="button" class="btn btn-block btn-default btn-lg">Booking</a>
+	  	<div class="col-md-6">
+	  		<div style="padding: 20px; transition: all 0.3s ease; border-radius: 10px;" class="interactive-card">
+	  			<i class="fa fa-book" style="font-size: 3em; color: #8b3a8b; margin-bottom: 15px; display: block;"></i>
+	  			<a href="/bookings/create" type="button" class="btn btn-block btn-default btn-lg" style="padding: 15px; font-size: 1.1em">
+	  				<i class="fa fa-plus"></i> Создать бронирование
+	  			</a>
+	  		</div>
 	  	</div>
 	 </div>
 
 
 
 	<div class="row" align="center" ng-if="main.loggedIn && main.isAdmin">
-  		<div class="col-xs-6">
-			<a href="/{{ main.id }}/" type="button" class="btn btn-block btn-default btn-lg">Profile</a>
-		</div>
-		<div class="col-xs-6">
-			<a href="/admin" type="button" class="btn btn-block btn-default btn-lg">Administrator</a>
+  		<div class="col-md-6">
+  			<div style="padding: 20px; transition: all 0.3s ease; border-radius: 10px;" class="interactive-card">
+  				<i class="fa fa-user" style="font-size: 3em; color: #8b3a8b; margin-bottom: 15px; display: block;"></i>
+  				<a href="/{{ main.id }}/" type="button" class="btn btn-block btn-default btn-lg" style="padding: 15px; font-size: 1.1em">
+  					<i class="fa fa-user-circle"></i> Мой профиль
+  				</a>
+  			</div>
+  		</div>
+		<div class="col-md-6">
+			<div style="padding: 20px; transition: all 0.3s ease; border-radius: 10px;" class="interactive-card">
+				<i class="fa fa-cog" style="font-size: 3em; color: #e74c3c; margin-bottom: 15px; display: block;"></i>
+				<a href="/admin" type="button" class="btn btn-block btn-danger btn-lg" style="padding: 15px; font-size: 1.1em">
+					<i class="fa fa-shield"></i> Администратор
+				</a>
+			</div>
   		</div>
 	</div>
 
 
 	<div class="row" align="center" ng-if="!main.loggedIn || !main.isAdmin">
-	  		<div style="width:50%">
-				<a href="/{{ main.id }}/" type="button" class="btn btn-block btn-default btn-lg">Profile</a>
+	  		<div class="col-md-6 col-md-offset-3">
+	  			<div style="padding: 20px; transition: all 0.3s ease; border-radius: 10px;" class="interactive-card">
+	  				<i class="fa fa-user" style="font-size: 3em; color: #8b3a8b; margin-bottom: 15px; display: block;"></i>
+					<a href="/{{ main.id }}/" type="button" class="btn btn-block btn-default btn-lg" style="padding: 15px; font-size: 1.1em">
+						<i class="fa fa-user-circle"></i> Мой профиль
+					</a>
+	  			</div>
 	  		</div>
 	</div>
 
 </div>
+
+<style>
+.interactive-card {
+  transform: scale(1);
+}
+.interactive-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(139, 58, 139, 0.2);
+  background-color: rgba(139, 58, 139, 0.05);
+}
+</style>

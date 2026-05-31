@@ -3,20 +3,20 @@
 <link rel="stylesheet" type="text/css" href="main.css">
 </head>
 <div class="page-header" ng-init="availability.getAvailability(availability.date)" >
-  <h1>Availability</h1>
+  <h1><i class="fa fa-calendar-o" style="margin-right: 10px;"></i>Доступность комнат</h1>
 </div>
 
     <div class="row" >
       <div class="col-sm-6">
         <div class="form-group">
-            <label for="date">Date</label>
+            <label for="date"><i class="fa fa-calendar" style="margin-right: 5px;"></i>Выберите дату</label>
            <input type="date" min="{{ availability.initDate | date: 'yyyy-MM-dd' }}" max="{{ availability.maxDate | date: 'yyyy-MM-dd' }}" class="form-control" ng-model="availability.date" ng-change="availability.getAvailability(availability.date)"> 
         </div>
       </div>
 
       <div class="col-sm-6">
           <br>
-          <a href="/bookings/create"><button class="btn btn-success" style="float: right">Book Now</button></a>
+          <a href="/bookings/create"><button class="btn btn-success" style="float: right; padding: 10px 20px; font-size: 1.05em;"><i class="fa fa-plus" style="margin-right: 5px;"></i>Забронировать сейчас</button></a>
       </div>
     </div>
 
@@ -24,20 +24,20 @@
                                     (availability.date | date: 'EEE') == 'Tue' ||
                                     (availability.date | date: 'EEE') == 'Wed' ||
                                     (availability.date | date: 'EEE') == 'Thu'">
-<table class="table table-bordered table-striped">
+<div class="alert alert-info"><i class="fa fa-info-circle" style="margin-right: 8px;"></i>Красная ячейка (X) = комната занята в это время</div>
+<table class="table table-bordered table-striped table-hover">
   <thead>
-    <tr style="background-color: #95a5a6; text-align: center">
-      <th>Room<br>(Capacity)</th>
-      <th ng-repeat="obj in availability.bookings">{{ obj.room.name }}<br>( {{ obj.room.capacity }} )</th>
+    <tr style="background: linear-gradient(135deg, #8b3a8b 0%, #2c3e50 100%); color: #fff; text-align: center">
+      <th style="color: #fff;">Время<br>(Комната)</th>
+      <th ng-repeat="obj in availability.bookings" style="color: #fff;">{{ obj.room.name }}<br>( {{ obj.room.capacity }} )</th>
     </tr>
   </thead>
   <tbody>
     <tr ng-repeat="time in ['4:00 PM', '4:30 PM', '5:00 PM', '5:30 PM', '6:00 PM', '6:30 PM', '7:00 PM', '7:30 PM', '8:00 PM', '8:30 PM', '9:00 PM', '9:30 PM', '10:00 PM', '10:30 PM', '11:00 PM', '11:30 PM', '12:00 AM', '12:30 AM']">
-      <td id="nopad">{{ time }}</td>
-      <td ng-repeat="booklist in availability.bookings" id="nopad">
+      <td id="nopad" style="font-weight: 600; background: rgba(139, 58, 139, 0.05);">{{ time }}</td>
+      <td ng-repeat="booklist in availability.bookings" id="nopad" style="text-align: center; padding: 8px;">
         <div ng-repeat="singlebook in booklist.bookings">
-          <div ng-if="!availability.isAvailable(singlebook, time)" style="background-color: #c0392b">X</div>
-          <!-- <div ng-if="availability.isAvailable(singlebook, time)" onclick="location.href='/bookings/create';" id="mouseover">BOOK</div> -->
+          <div ng-if="!availability.isAvailable(singlebook, time)" style="background-color: #c0392b; color: white; padding: 8px; border-radius: 4px; font-weight: bold;">✗ Занято</div>
         </div>
       </td>
     </tr>

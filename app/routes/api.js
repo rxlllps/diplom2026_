@@ -57,7 +57,7 @@ module.exports = function(app, express) {
 						isAdmin: user.isAdmin,
                         banExpires: user.banExpires
                     }, superSecret, {
-                      expiresInMinutes: 1440 // expires in 24 hours
+                      expiresIn: '24h' // expires in 24 hours
                     });
                 
                     //return the information including token as JSON    
@@ -80,7 +80,7 @@ module.exports = function(app, express) {
 		
 		.post(function(req, res){
 
- 			var smtpTransport = nodemailer.createTransport('SMTP', {
+ 			var smtpTransport = nodemailer.createTransport({
 				service: 'gmail',
 				auth: {
 					user: 'purplefoxcontact@gmail.com',
@@ -170,7 +170,7 @@ module.exports = function(app, express) {
                     });
                 },
                 function(token, user, done) {
-                    var smtpTransport = nodemailer.createTransport('SMTP', {
+                    var smtpTransport = nodemailer.createTransport({
                         service: 'gmail',
                             auth: {
                                 user: 'PurpleFoxPassReset@gmail.com',
@@ -230,7 +230,7 @@ module.exports = function(app, express) {
                             //changes the password and resets the tokens
                             user.password = req.body.password;
                             user.passwordResetToken = undefined;
-                            user.passawordResetExpires = undefined;
+                            user.passwordResetExpires = undefined;
 
                             user.save(function(err) {
                                 done(err, user);
@@ -239,7 +239,7 @@ module.exports = function(app, express) {
                     },
                     // creates a nodemailer object and defines the email to send the message from
                     function(user, done) {
-                        var smtpTransport = nodemailer.createTransport('SMTP', {
+                        var smtpTransport = nodemailer.createTransport({
                             service: 'gmail',
                                 auth: {
                                     user: 'PurpleFoxPassReset@gmail.com',
@@ -505,7 +505,7 @@ module.exports = function(app, express) {
 
 		.get(function(req, res){
 
-			Booking.find({ date: req.body.date, inRoom: config.req.body.roomName }, function(err, avail){ 
+			Booking.find({ date: req.body.date, inRoom: req.body.roomName }, function(err, avail){ 
 				if (err) return res.send(err);
 
 				res.json(avail);			
