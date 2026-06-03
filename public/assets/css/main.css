@@ -38,6 +38,8 @@ body {
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   color: var(--text-color);
   min-height: 100vh;
+  /* reserve space for the fixed bottom footer so it never covers content */
+  padding-bottom: 50px;
 }
 
 /* Navbar Styling */
@@ -159,6 +161,15 @@ body {
   background-color: #fff;
 }
 
+/* Uniform height for inputs and selects so date/time/select align with the
+   rest (Bootstrap's default 34px clipped <select> text; native date/time
+   inputs grew taller than the others). Textarea keeps its auto height. */
+input.form-control,
+select.form-control {
+  height: 46px;
+  line-height: 1.5;
+}
+
 .form-control:focus {
   border-color: var(--primary-color);
   box-shadow: 0 0 10px rgba(139,58,139,0.2);
@@ -183,6 +194,19 @@ body {
   box-shadow: 0 8px 32px rgba(0,0,0,0.1);
   margin-top: 30px;
   margin-bottom: 30px;
+}
+
+/* The white "card" styling above must not leak into the navbar/footer
+   containers, otherwise their white links render on a white card and
+   become invisible. Reset those containers back to a plain layout. */
+.navbar .container,
+.footer .container {
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0 15px;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .page-header {
@@ -314,6 +338,20 @@ a:hover {
 .navbar-link:hover {
   border-bottom-color: #fff;
   color: #fff !important;
+}
+
+/* Bottom footer bar: fixed height, links centered with spacing */
+.navbar-fixed-bottom {
+  min-height: 50px;
+  margin-bottom: 0;
+}
+
+.navbar-fixed-bottom .container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  min-height: 50px;
 }
 
 /* Row & Column Spacing */

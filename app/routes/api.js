@@ -1,14 +1,13 @@
 var User		= require('../models/user');
 var jwt 		= require('jsonwebtoken');
-var config 	    = require('../../config');
 var async 	    = require('async');
 var crypto      = require('crypto');
 var nodemailer  = require('nodemailer');
 var Booking     = require('../models/booking');
 var Room        = require('../models/room');
 
-//super secret for creating tokens
-var superSecret = config.secret;
+//super secret for creating tokens (default lets the app run without a .env)
+var superSecret = process.env.JWT_SECRET || 'dev-secret-change-me';
 
 module.exports = function(app, express) {
 	
@@ -83,12 +82,12 @@ module.exports = function(app, express) {
  			var smtpTransport = nodemailer.createTransport({
 				service: 'gmail',
 				auth: {
-					user: 'purplefoxcontact@gmail.com',
-					pass: 'Seng2993'
+					user: process.env.SMTP_CONTACT_USER,
+					pass: process.env.SMTP_CONTACT_PASS
 				}
 			})
 			var mailOptions = {
-				to: 'purplefoxcontact@gmail.com',
+				to: process.env.SMTP_CONTACT_USER,
   				from: req.body.email,
 				subject: req.body.subject,
 				text: 'Return Email: '+ req.body.email + '\n\n' + req.body.message
@@ -118,7 +117,6 @@ module.exports = function(app, express) {
             user.age = req.body.age;  // set the users age (comes from the request)
             user.address = req.body.address;  // set the users address (comes from the request)
             user.phone_number = req.body.phone_number;  // set the users phone_number (comes from the request)
-			user.banExpires = Date.now();
 
             user.save(function(err) {
                 if (err) {
@@ -173,13 +171,13 @@ module.exports = function(app, express) {
                     var smtpTransport = nodemailer.createTransport({
                         service: 'gmail',
                             auth: {
-                                user: 'PurpleFoxPassReset@gmail.com',
-                                pass: 'Seng2993'
+                                user: process.env.SMTP_RESET_USER,
+                                pass: process.env.SMTP_RESET_PASS
                             }
                         })
                     var mailOptions = {
                         to: user.email,
-                        from: 'PurpleFoxPassReset@gmail.com',
+                        from: process.env.SMTP_RESET_USER,
                         subject: 'Password Reset',
                         text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
                               'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
@@ -242,13 +240,13 @@ module.exports = function(app, express) {
                         var smtpTransport = nodemailer.createTransport({
                             service: 'gmail',
                                 auth: {
-                                    user: 'PurpleFoxPassReset@gmail.com',
-                                    pass: 'Seng2993'
+                                    user: process.env.SMTP_RESET_USER,
+                                    pass: process.env.SMTP_RESET_PASS
                                 }
                         })
                         var mailOptions = {
                             to: user.email,
-                            from: 'PurpleFoxPassReset@gmail.com',
+                            from: process.env.SMTP_RESET_USER,
                             subject: 'Password Reset',
                             text: 'Hello ' + user.name + ',\n\n' +
                                   'This is a confirmation that the password for your account has just been changed. You may now log in with your new password at:\n\n' +
@@ -780,10 +778,12 @@ apiRouter.route('/availability/edit/:booking_id/:date/:startTime/:endTime')
 
     apiRouter.route('/banned')
         .get(function(req, res) {
-            User.findOne( { _id: req.decoded._id, banExpires: {$lt:Date.now()} }, 'banExpires', function(err, user) {
+            // Забанен, если у пользователя задан banExpires и он ещё в будущем
+            // (бан ставится как now + 12 часов). Отсутствие поля = не забанен.
+            User.findOne( { _id: req.decoded._id, banExpires: {$gt: new Date()} }, 'banExpires', function(err, user) {
                 if(err) return res.send(err);
 
-                if(!user)
+                if(user)
                     return res.json({
                         banned: true,
                         message: 'User is banned'
